@@ -1,15 +1,16 @@
-ARG RUBY_VERSION
-FROM circleci/ruby:$RUBY_VERSION
+FROM alpine:latest
 
-ARG BUNDLER_VERSION
-
-RUN echo "fs.inotify.max_user_watches=204800" | sudo tee -a /etc/sysctl.conf
-
+ARG PERCONA_TOOLKIT_VERSION
 RUN set -x && \
-    sudo apt-get update && \
-    sudo apt-get install -y libldap2-dev libsasl2-dev libmariadb-dev && \
-    sudo apt-get clean
-
-RUN set -x && \
-    gem update bundler && \
-    gem install bundler:$BUNDLER_VERSION
+    apk update && \
+    apk add perl perl-dbd-mysql curl && \
+    apk add --virtual=build make && \
+    cd /tmp && \
+    curl -o percona-toolkit.tar.gz https://www.percona.com/downloads/percona-toolkit/$PERCONA_TOOLKIT_VERSION/source/debian/percona-toolkit-$PERCONA_TOOLKIT_VERSION.tar.gz && \
+    tar zxf percona-toolkit.tar.gz && \
+    cd percona-toolkit-* && \
+    perl Makefile.PL && \
+    make && \
+    make install && \
+    rm -rf percona-toolkit* && \
+    apk del --purge build
