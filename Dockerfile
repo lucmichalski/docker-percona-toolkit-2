@@ -12,5 +12,6 @@ RUN set -x && \
     perl Makefile.PL && \
     make && \
     make install && \
+    cd /tmp && \
     rm -rf percona-toolkit* && \
     apk del --purge build
