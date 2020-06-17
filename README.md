@@ -9,3 +9,10 @@ ${PERCONA_TOOLKIT_VERSION}
 ```
 cat tcpdump.txt | docker run -i --rm taka0125/docker-percona-toolkit:latest pt-query-digest --type tcpdump --limit 100 > tcpdump_digest.txt
 ```
+
+or
+
+```
+alias pt-query-digest='docker run -i --rm taka0125/docker-percona-toolkit:latest pt-query-digest'
+cat tcpdump.txt | pt-query-digest --type tcpdump --limit 100 > tcpdump_digest.txt
+```
